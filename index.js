@@ -39,8 +39,30 @@ app.get('/info', (req, res) => {
 });
 
 app.post('/api/persons', (req, res) => {
-  const person = req.body;
-  person.id = Math.floor(Math.random() * 1000000);
+  const body = req.body;
+
+  if (!body.name) {
+    return res.status(400).json({
+      error: 'The name is missing!'
+    }).end();
+  } else if (!body.number) {
+    return res.status(400).json({
+      error: 'The number is missing!'
+    }).end();
+  }
+  const duplicatePerson = persons.find(person => person.name === body.name);
+
+  if (duplicatePerson) {
+    return res.status(400).json({
+      error: `${duplicatePerson.name} already exists in the phonebook!`
+    }).end();
+  }
+
+  const person = {
+    id: Math.floor(Math.random() * 1000000),
+    name: body.name,
+    number: body.number,
+  };
 
   persons = persons.concat(person);
 
