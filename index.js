@@ -39,6 +39,20 @@ app.post('/api/persons', (req, res) => {
       error: 'The number is missing!'
     }).end();
   }
+
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  });
+
+  person
+    .save()
+    .then(savedPerson => {
+      res.json(savedPerson);
+    })
+    .catch(error => console.error('Person save failed!', error.message));
+
+  /*
   const duplicatePerson = persons.find(person => person.name === body.name);
 
   if (duplicatePerson) {
@@ -46,16 +60,7 @@ app.post('/api/persons', (req, res) => {
       error: `${duplicatePerson.name} already exists in the phonebook!`
     }).end();
   }
-
-  const person = {
-    id: Math.floor(Math.random() * 1000000),
-    name: body.name,
-    number: body.number,
-  };
-
-  persons = persons.concat(person);
-
-  res.json(person);
+   */
 });
 
 app.get('/api/persons', (req, res) => {
