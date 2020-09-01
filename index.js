@@ -27,7 +27,7 @@ app.get('/info', (req, res) => {
   `);
 });
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const body = req.body;
 
   if (!body.name) {
@@ -50,7 +50,7 @@ app.post('/api/persons', (req, res) => {
     .then(savedPerson => {
       res.json(savedPerson);
     })
-    .catch(error => console.error('Person save failed!', error.message));
+    .catch(error => next(error));
 
   /*
   const duplicatePerson = persons.find(person => person.name === body.name);
@@ -63,13 +63,13 @@ app.post('/api/persons', (req, res) => {
    */
 });
 
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
   Person
     .find({})
     .then(people => {
       res.json(people);
     })
-    .catch(error => console.error('Cannot find Person document from database:',error.message));
+    .catch(error => next(error));
 });
 
 app.get('/api/persons/:id', (req, res) => {
@@ -91,6 +91,20 @@ app.delete('/api/persons/:id', (req, res, next) => {
     })
     .catch(error => next(error))
 });
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({
+      error: 'errorneous id',
+    });
+  }
+
+  next(error);
+}
+
+app.use(errorHandler);
 
 const port = process.env.PORT;
 app.listen(port);
