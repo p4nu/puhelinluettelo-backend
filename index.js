@@ -84,11 +84,12 @@ app.get('/api/persons/:id', (req, res) => {
   res.json(person);
 })
 
-app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  persons = persons.filter(person => person.id !== id);
-
-  res.status(204).end();
+app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.status(204).end();
+    })
+    .catch(error => next(error))
 });
 
 const port = process.env.PORT;

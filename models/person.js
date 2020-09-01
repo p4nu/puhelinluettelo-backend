@@ -16,6 +16,8 @@ mongoose
     console.error('Error connecting to MongoDB:', error.message);
   });
 
+mongoose.set('useFindAndModify', false);
+
 mongoose.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
