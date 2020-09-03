@@ -56,16 +56,6 @@ app.post('/api/persons', (req, res, next) => {
       res.json(savedPerson);
     })
     .catch(error => next(error));
-
-  /*
-  const duplicatePerson = persons.find(person => person.name === body.name);
-
-  if (duplicatePerson) {
-    return res.status(400).json({
-      error: `${duplicatePerson.name} already exists in the phonebook!`
-    }).end();
-  }
-   */
 });
 
 app.get('/api/persons', (req, res, next) => {
@@ -124,6 +114,10 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({
       error: 'errorneous id',
+    });
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({
+      error: error.message,
     });
   }
 
