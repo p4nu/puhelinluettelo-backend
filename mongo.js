@@ -12,9 +12,9 @@ const url =
 
 mongoose
   .connect(url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     const personSchema = new mongoose.Schema({
       name: String,

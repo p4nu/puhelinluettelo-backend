@@ -105,7 +105,7 @@ app.delete('/api/persons/:id', (req, res, next) => {
     .then(() => {
       res.status(204).end();
     })
-    .catch(error => next(error))
+    .catch(error => next(error));
 });
 
 const errorHandler = (error, request, response, next) => {
@@ -122,7 +122,7 @@ const errorHandler = (error, request, response, next) => {
   }
 
   next(error);
-}
+};
 
 app.use(errorHandler);
 
